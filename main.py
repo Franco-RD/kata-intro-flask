@@ -1,4 +1,4 @@
-from flask import Flask  #Importar libreria de flask
+from flask import Flask, render_template  #Importar libreria de flask
 
 app = Flask(__name__)  #El name es para pasarle el parametro por otro medio de entrada como la terminal
 
@@ -35,3 +35,23 @@ def tunombre(name):
 @app.route("/numero/<int:parametro>")  #Se pone <int:parametro> porque por default el parametro es tomado como str, por lo que daria error al hacer el cuadrado
 def cuadrado(parametro):
     return f"El parametro de {parametro} es {parametro*parametro}"
+
+#Ej: realizar una ruta que dinamicamente pueda solicitar o realizar operaciones de +, -, *, / segun los parametros pasados en la ruta (en una ruta se pueden pasar varios parametros)
+
+@app.route("/calculadora/<operacion>/<int:n1>-<int:n2>")
+def operacion(operacion, n1, n2):
+    if operacion == "suma":
+        return f"La {operacion} de {n1} + {n2} da {n1 + n2}"
+    elif operacion == "resta":
+        return f"La {operacion} de {n1} - {n2} da {n1 - n2}"
+    elif operacion == "multiplicacion":
+        return f"La {operacion} de {n1} x {n2} da {n1 * n2}"
+    elif operacion == "division":
+        return f"La {operacion} de {n1} / {n2} da {n1 / n2}"
+    else:
+        return "Elija una operacion valida entre suma, resta, multiplicacion o division, y utilice numeros enteros"
+
+@app.route("/<dato>")
+def mihtml(dato):
+    list_fruta = ['Platano', 'Fresa', 'Piña', 'Melon', 'Naranja']
+    return render_template("hola.html", variable = dato, frutas = list_fruta)  #Esto hace que el parametro <dato> se pase al html y se pueda usar ahi (en este caso linea 23 de hola.html)
